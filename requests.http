@@ -1,0 +1,16 @@
+POST http://localhost:5000/
+Content-Type: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6IkxJVklBIEFSQVVKTyBWSUVJUkEgUk9EUklHVUVTIENPUkRFSVJPIiwiZXhwIjoxNjM3NzM3NzE0fQ.xoWvJ6M9u25qy28rz1LaCOi0aDw6qLdEdJx8DnwCC2U
+{
+  "username": "00028249577",
+  "password": "704609107818221painel"
+}
+################################
+
+POST http://localhost:5000/v1/auth
+Content-Type: application/json
+
+{
+  "username": "00028249577",
+  "password": "704609107818221painel"
+}
