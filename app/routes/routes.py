@@ -1,5 +1,5 @@
 from app import app
-from app.models import LoginService, login
+from app.models import LoginService, login, IreceBase
 from ..models.login import UserLogin, login_schema, logins_schema
 from flask import jsonify, request
 import json
@@ -21,3 +21,10 @@ def root():
 @app.route('/v1/auth', methods=['POST'])
 def _auth():
     return auth()
+
+
+@app.route('/get-data', methods=['GET'])
+@token_required
+def getData():
+  data = IreceBase.IreceBase()
+  return jsonify({'message': 'successfully fetched', 'data': data.countGender() })    

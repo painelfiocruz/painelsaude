@@ -21,8 +21,7 @@ def token_required(f):
                         'message': 'Token is missing.'
                     }), 401
                 try:
-                    data = jwt.decode( auth_token, app.config['SECRET_KEY'],
-                    algorithms=['HS256'] )
+                    data = jwt.decode( auth_token, app.config['SECRET_KEY'], algorithms=["HS256"] )
                     return f(*args, **kwargs)
                 except Exception:
                     print(traceback.print_exc())
@@ -32,9 +31,10 @@ def token_required(f):
                     }
                     return jsonify(responseObject), 401
             except IndexError:
+                print(traceback.print_exc())
                 responseObject = {
                     'status': 'fail',
-                    'message': 'Bearer token malformed.'
+                    'message': 'Bearer token malformed..'
                 }
                 return jsonify(responseObject), 401
         else:
@@ -62,10 +62,13 @@ def auth():
         return jsonify({'message': 'user not found', 'data': []}), 401
 
     if user :
-        token = jwt.encode({
-          'username': user['nome'],
-          'exp': datetime.datetime.now() + datetime.timedelta(hours=12)
-          }, app.config['SECRET_KEY'] )
+        token = jwt.encode(
+            {
+            'username': user['nome'],
+            'exp': datetime.datetime.now() + datetime.timedelta(hours=12)
+            }, 
+            app.config['SECRET_KEY'], 
+            algorithm="HS256" )
         print( token )  
         return jsonify({
           'message': 'Validated successfully',
