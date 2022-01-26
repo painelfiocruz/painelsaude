@@ -7,17 +7,18 @@ pd.set_option('display.width', 1000)
 
 
 cadastro_mestre = pd.read_excel('../../files/IRECE_CADASTRO_MESTRE_PESSOAS.xlsx')
-tb_fat_at_ind_2018 = pd.read_csv('../../files/tb_fat_atendimento_individual_2018.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
-tb_fat_at_ind_2019 = pd.read_csv('../../files/tb_fat_atendimento_individual_2019.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
-tb_fat_at_ind = pd.read_csv('../../files/tb_fat_atendimento_individual_202011181301.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
-unidades = pd.read_csv('../../files/unidades.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
+# tb_fat_at_ind_2018 = pd.read_csv('../../files/tb_fat_atendimento_individual_2018.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
+# tb_fat_at_ind_2019 = pd.read_csv('../../files/tb_fat_atendimento_individual_2019.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
+# tb_fat_at_ind = pd.read_csv('../../files/tb_fat_atendimento_individual_202011181301.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
+tb_fat_at_ind_2018_2019_2020 =  pd.read_csv('../../files/tb_fat_atendimento_individual.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
+unidades = pd.read_csv('../../files/tb_dim_unidade_saude.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
 municipio = pd.read_csv('../../files/tb_dim_municipio.csv',sep=';',engine='python', decimal = ',',keep_default_na=False)
 
 cadastro_mestre_SELECTED = cadastro_mestre[['co_fat_cidadao_pec','co_dim_municipio','co_dim_unidade_saude','co_dim_tipo_localizacao','CO_DIM_SEXO','DT_NASCIMENTO']]
 
-tb_fat_at_ind_2018_2019 = tb_fat_at_ind_2018.append(tb_fat_at_ind_2019, ignore_index=True)
+# tb_fat_at_ind_2018_2019 = tb_fat_at_ind_2018.append(tb_fat_at_ind_2019, ignore_index=True)
 
-tb_fat_at_ind_2018_2019_2020 = tb_fat_at_ind_2018_2019.append(tb_fat_at_ind, ignore_index=True)
+# tb_fat_at_ind_2018_2019_2020 = tb_fat_at_ind_2018_2019.append(tb_fat_at_ind, ignore_index=True)
 
 def change_string(x):
     return x.replace('ABP009', 'R96').replace("ABP019","A77").replace('ABP008', 'T91').replace('ABP006', 'T90').replace('ABP010', 'R95').replace('ABP020', 'A78').replace('ABP018', 'A78').replace('ABP005', 'K86').replace('ABP007', 'T82').replace('ABP001', 'W78').replace('ABP004', 'A98').replace('ABP002', 'W18').replace('ABP024', 'K22').replace('ABP015', '57').replace('ABP011', 'P17').replace('ABP017', 'A70').replace('ABP012', 'P16').replace('ABP013', 'P19')

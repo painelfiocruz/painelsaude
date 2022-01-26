@@ -1,46 +1,51 @@
 import psycopg2
-
+import pandas as pd
+import numpy as np
 
 class Conexao(object):
-	_db = None
-	def __init__(self, mhost, db, usr, pwd, port):
-		self._db = psycopg2.connect(
-			host=mhost, dbname=db, user=usr,  password=pwd, port=port)
+    _db = None
+    def __init__(self, mhost, db, usr, pwd, port):
+        self._db = psycopg2.connect(
+            host=mhost, dbname=db, user=usr,  password=pwd, port=port)
 
-	def testConection(self):
-		return self.consultar("""SELECT table_name FROM information_schema.tables
-       						  WHERE table_schema = 'public'""")
+    def testConection(self):
+        return self.consultar("""SELECT table_name FROM information_schema.tables
+                                 WHERE table_schema = 'public'""")
 
-	def manipular(self, sql):
-		try:
-			cur = self._db.cursor()
-			cur.execute(sql)
-			cur.close()
-			self._db.commit()
-		except Exception as e:
-			print(f'Error {e}')
-			return False
-		# finally:
-		# 	if self._db:
-		# 		self._db.close()
-		return True
+    def manipular(self, sql):
+        try:
+            cur = self._db.cursor()
+            cur.execute(sql)
+            cur.close()
+            self._db.commit()
+        except Exception as e:
+            print(f'Error {e}')
+            return False
+        # finally:
+        #     if self._db:
+        #         self._db.close()
+        return True
 
-	def consultar(self, sql):
-		rs=None
-		try:
-			cur=self._db.cursor()
-			cur.execute(sql)
-			rs=cur.fetchall()
-		except Exception as e:
-			print(f'Error {e}')
-			return None
-		# finally:
-		# 	if self._db:
-		# 		self._db.close()
-		return rs
-	
-	def close(self):
-		self._db.close()
+    def consultar(self, sql, Dataframe=False):
+        rs=None
+        try:
+            
+            if Dataframe:
+                rs=pd.read_sql( sql, self._db )
+            else:
+                cur=self._db.cursor()
+                cur.execute(sql)
+                rs=cur.fetchall()
+        except Exception as e:
+            print(f'Error {e}')
+            return None
+        # finally:
+        #     if self._db:
+        #         self._db.close()
+        return rs
+    
+    def close(self):
+        self._db.close()
 
 class Connection():
     _db = None
