@@ -34,3 +34,9 @@ def getData():
 @token_required
 def getDataUnits():
   return jsonify({'message': 'successfully fetched', 'data': UnidadesService.getUnits().to_dict() })    
+
+@app.route('/v1/get-demographic-info/<nu_cnes>', methods=['GET'])
+@token_required
+def getDataByNuCnes(nu_cnes):
+  data = IreceBase.IreceBase()
+  return jsonify({'message': 'successfully fetched', 'data': data.getDemographicInfo(nu_cnes) })    
