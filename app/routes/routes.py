@@ -33,7 +33,7 @@ def getData():
 @app.route('/v1/get-units', methods=['GET'])
 @token_required
 def getDataUnits():
-  return jsonify({'message': 'successfully fetched', 'data': UnidadesService.getUnits().to_dict() })    
+  return jsonify({'message': 'successfully fetched', 'data': UnidadesService.getUnits().to_dict('r') })    
 
 @app.route('/v1/get-demographic-info/<nu_cnes>', methods=['GET'])
 @token_required
