@@ -1,42 +1,52 @@
 from app import app
-from app.models import LoginService, UnidadesService, login, IreceBase
-from ..models.login import UserLogin, login_schema, logins_schema
-from flask import jsonify, request
+from app.models import LoginService, UnidadesService, IreceBase
+from flask import jsonify, request, render_template, send_from_directory
 import json
-from ..helpers.helper import token_required, auth
+from ..helpers.helper import token_required, auth, connection
 
-@app.route('/', methods=['POST'])
-@token_required
-def root():
-  username = request.json['username']
-  password = request.json['password']
-  
-  # data = LoginService.login('00028249577','704609107818221painel')
-  data = LoginService.login(username, password)
-  
-  
-  return jsonify({'message': 'successfully fetched', 'data': data })
+@app.route('/')
+@app.route('/index')
+@app.route('/index.html')
+def loginform():
+    return render_template('index.html')
+
+@app.route("/static/<path:path>")
+def static_dir(path):
+    return send_from_directory("static", path)
 
 
 @app.route('/v1/auth', methods=['POST'])
 def _auth():
+  try:
     return auth()
+  except Exception as e:
+    return jsonify({'message': 'Error during login. ' + str(e) }), 400      
 
 
 @app.route('/v1/get-demographic-info', methods=['GET'])
 @token_required
 def getData():
-  data = IreceBase.IreceBase()
-  print(data.getDemographicInfo())
-  return jsonify({'message': 'successfully fetched', 'data': data.getDemographicInfo() })    
+  try:
+    data = IreceBase.IreceBase()
+    print(data.getDemographicInfo())
+    return jsonify({'message': 'successfully fetched', 'data': data.getDemographicInfo() })    
+  except:
+    return jsonify({'message': 'Error during Get Demographic Info' }), 400      
 
 @app.route('/v1/get-units', methods=['GET'])
 @token_required
 def getDataUnits():
-  return jsonify({'message': 'successfully fetched', 'data': UnidadesService.getUnits().to_dict('r') })    
+  try:
+    con = connection()
+    return jsonify({'message': 'successfully fetched', 'data': UnidadesService.getUnits(con).to_dict('r') })    
+  except:
+    return jsonify({'message': 'Error during Get Units' }), 400 
 
 @app.route('/v1/get-demographic-info/<nu_cnes>', methods=['GET'])
 @token_required
 def getDataByNuCnes(nu_cnes):
-  data = IreceBase.IreceBase()
-  return jsonify({'message': 'successfully fetched', 'data': data.getDemographicInfo(nu_cnes) })    
+  try:
+    data = IreceBase.IreceBase()
+    return jsonify({'message': 'successfully fetched', 'data': data.getDemographicInfo(nu_cnes) })    
+  except:
+    return jsonify({'message': 'Error during Get Data By CNES' }), 400 

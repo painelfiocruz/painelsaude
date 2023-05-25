@@ -27,7 +27,9 @@ class IreceBase:
     if self._base is None:
       logging.info('Loading the final data base')
       self._base = pd.read_excel(
-          'files/CADASTRO_MESTRE_JOIN_AT_IND_GEST_HIP_DIAB_JOIN_UNIDADES_CLEAN_PAINEL.xlsx')
+          'files/CADASTRO_MESTRE_JOIN_AT_IND_GEST_HIP_DIAB_JOIN_UNIDADES_CLEAN_PAINEL.xlsx', engine='openpyxl')
+      # self._base = pd.read_parquet(
+      #     'files/BASE_DEMOGRAFICO.parquet')
       logging.info('Base loaded')
     # print(self._base)
     return self._base
@@ -35,7 +37,7 @@ class IreceBase:
   def gender(self, __data,  nu_cnes=None):
     _data = __data.copy()
     if nu_cnes is not None:
-      _data =  _data.query( 'nu_cnes == '+nu_cnes)
+      _data =  _data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
     gender = {
         "masculino": _data[_data['ds_sexo'] == 'Masculino'].shape[0],
         "feminino": _data[_data['ds_sexo'] == 'Feminino'].shape[0]
@@ -46,7 +48,7 @@ class IreceBase:
   def indicators(self, __data,  nu_cnes=None):
     _data = __data.copy()
     if nu_cnes is not None:
-        _data = _data.query( 'nu_cnes == '+nu_cnes) #[(_data['nu_cnes'] == nu_cnes)]
+        _data = _data.query( 'nu_cnes == "{}"'.format(nu_cnes) ) #[(_data['nu_cnes'] == nu_cnes)]
 
     return {
         "hipertensao": {
@@ -67,16 +69,22 @@ class IreceBase:
   def locationArea(self, __data, nu_cnes=None):
     _data = __data.copy()
     if nu_cnes is not None:
-        _data =  _data.query( 'nu_cnes == '+nu_cnes)
+        _data =  _data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
   
     _data['ds_tipo_localizacao'] = _data['ds_tipo_localizacao'].str.lower()
     return _data.groupby(['ds_tipo_localizacao']).size().to_dict()
 
+  def getTotalCnes( self, __data, nu_cnes=None):
+    _data = __data.copy()
+    if nu_cnes is not None:
+      _data =  _data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
+      return _data.shape[0]
+    return _data.shape[0]
 
   def ageGroup(self, __data,  nu_cnes=None):
       _data = __data.copy()
       if nu_cnes is not None:
-        _data = _data =  _data.query( 'nu_cnes == '+nu_cnes)
+        _data =  _data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
   
       faixaEtaria = {
           "Faixa 1": "Faixa etária 0 a 17 anos",
@@ -87,8 +95,13 @@ class IreceBase:
           "nan": "nan"
       }
       _data['ds_faixa_etaria'] = _data['ds_faixa_etaria'].map(faixaEtaria)
+      print( _data['ds_faixa_etaria'].unique())
+      print(_data.groupby(
+          ["ds_sexo", "ds_tipo_localizacao"]).size())
+
       piramide = pd.DataFrame({'count': _data.groupby(
           ["ds_sexo", "ds_faixa_etaria", "ds_tipo_localizacao"]).size()}).reset_index()
+
       result = piramide \
                 .groupby('ds_sexo')\
                   .apply(lambda x:
@@ -101,12 +114,14 @@ class IreceBase:
                           ]
                         ) \
                 .to_dict()
+      print( result )
       return result
 
   def getDemographicInfo(self, nu_cnes = None):
+    nu_cnes = nu_cnes
     return  {
-    "ibgePopulation": 74050,
-    "total": self._base.shape[0],
+    "ibgePopulation": 72512,
+    "total": self.getTotalCnes(self._base, nu_cnes),
     "gender":self.gender(self._base, nu_cnes),
     "locationArea": self.locationArea(self._base, nu_cnes),
     "ageGroups": self.ageGroup(self._base, nu_cnes),

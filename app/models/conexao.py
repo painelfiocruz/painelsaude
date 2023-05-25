@@ -5,8 +5,27 @@ import numpy as np
 class Conexao(object):
     _db = None
     def __init__(self, mhost, db, usr, pwd, port):
+        self.mhost = mhost
+        self.db = db
+        self.usr = usr
+        self.pwd = pwd
+        self.port = port
+        self.connect()
+
+    def connect(self):
+        print('pwd: {}'.format(self.pwd))
         self._db = psycopg2.connect(
-            host=mhost, dbname=db, user=usr,  password=pwd, port=port)
+            host=self.mhost,
+            dbname=self.db,
+            user=self.usr,
+            password=self.pwd,
+            port=self.port,
+            connect_timeout=3,
+            keepalives=1,
+            keepalives_idle=5,
+            keepalives_interval=2,
+            keepalives_count=2
+            )
 
     def testConection(self):
         return self.consultar("""SELECT table_name FROM information_schema.tables
@@ -28,20 +47,23 @@ class Conexao(object):
 
     def consultar(self, sql, Dataframe=False):
         rs=None
+        cur = None
         try:
-            
+            self.connect()
             if Dataframe:
                 rs=pd.read_sql( sql, self._db )
             else:
                 cur=self._db.cursor()
                 cur.execute(sql)
                 rs=cur.fetchall()
-        except Exception as e:
+                cur.close()
+        except (Exception, Error) as e:
             print(f'Error {e}')
-            return None
-        # finally:
-        #     if self._db:
-        #         self._db.close()
+        finally:
+            if self._db:
+                self._db.close()
+            if cur is not None:
+                cur.close()
         return rs
     
     def close(self):
@@ -55,43 +77,23 @@ class Connection():
         
     def testConect(self):
         try:
-            # trace("testConect", "connection.py", "", "Conexão ao banco", "Iniciando")
             _db = Conexao(self._config['host'], self._config['dataBase'], self._config['user'], self._config['pwd'], self._config['port'])
-            # trace("testConect", "connection.py", "", "Conexão ao banco", "Realizado")
-            # trace("testConect", "connection.py", "", "Teste de conexão ao banco", "Iniciando")
             if _db.testConection():
-                # trace("testConect", "connection.py", "", "Teste de conexão ao banco", "Realizado")
-                # trace("testConect", "connection.py", "", "Fechando conexão com o banco", "Iniciando")
                 _db.close()
-                # trace("testConect", "connection.py", "", "Fechando conexão com o banco", "Realizado")
                 return True
             else:
-                # trace("testConect", "connection.py", "", "Teste de conexão ao banco", "Não realizado")
-                # trace("testConect", "connection.py", "", "Fechando conexão com o banco", "Iniciando")
                 _db.close()
-                # trace("testConect", "connection.py", "", "Fechando conexão com o banco", "Realizado")
                 return False
         except Exception as e:
-            # trace("testConect", "connection.py", "", "Teste de conexão ao banco", "Erro")
-            # trace("testConect", "connection.py", "", "Erro", e)
             print(e)
             return False
 
     def conectar(self):
-        # Realiza a conexão com o banco de dados no banco
         try:
-            # trace("conectar", "connection.py", "", "Conexão ao banco", "Iniciando")
-            
             _db = Conexao(self._config['host'], self._config['dataBase'], self._config['user'], self._config['pwd'], self._config['port'])
-            # trace("conectar", "connection.py", "", "Conexão ao banco", "Realizado")
-            # trace("conectar", "connection.py", "", "Teste de conexão ao banco", "Iniciando")
             if _db.testConection():
-                # trace("conectar", "connection.py", "", "Fechando conexão com o banco", "Realizado")
                 return _db
             else:
-                # trace("conectar", "connection.py", "", "Teste de conexão ao banco", "Não realizado")
                 return False
         except Exception as e:
-            # trace("conectar", "connection.py", "", "Teste de conexão ao banco", "Erro")
-            # trace("conectar", "connection.py", "", "Erro", e)
             return False    

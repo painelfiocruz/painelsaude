@@ -1,0 +1,40 @@
+{
+  "files": {
+    "main.css": "/static/css/main.c60f7c20.chunk.css",
+    "main.js": "/static/js/main.01561ff3.chunk.js",
+    "main.js.map": "/static/js/main.01561ff3.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.9f921a2c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.9f921a2c.js.map",
+    "static/css/2.42d51ddf.chunk.css": "/static/css/2.42d51ddf.chunk.css",
+    "static/js/2.b0dc7c2a.chunk.js": "/static/js/2.b0dc7c2a.chunk.js",
+    "static/js/2.b0dc7c2a.chunk.js.map": "/static/js/2.b0dc7c2a.chunk.js.map",
+    "index.html": "/index.html",
+    "static/css/2.42d51ddf.chunk.css.map": "/static/css/2.42d51ddf.chunk.css.map",
+    "static/css/main.c60f7c20.chunk.css.map": "/static/css/main.c60f7c20.chunk.css.map",
+    "static/js/2.b0dc7c2a.chunk.js.LICENSE.txt": "/static/js/2.b0dc7c2a.chunk.js.LICENSE.txt",
+    "static/media/SUS.1d1ad876.svg": "/static/media/SUS.1d1ad876.svg",
+    "static/media/diabetes.6e66b9c8.svg": "/static/media/diabetes.6e66b9c8.svg",
+    "static/media/feminino.411324d0.svg": "/static/media/feminino.411324d0.svg",
+    "static/media/gestantes.563dfbd4.svg": "/static/media/gestantes.563dfbd4.svg",
+    "static/media/grafico_gestante2.14aa69b3.png": "/static/media/grafico_gestante2.14aa69b3.png",
+    "static/media/hipertensao.31b6a8e8.svg": "/static/media/hipertensao.31b6a8e8.svg",
+    "static/media/homem.75cf7e95.svg": "/static/media/homem.75cf7e95.svg",
+    "static/media/info-circle.855fba57.svg": "/static/media/info-circle.855fba57.svg",
+    "static/media/logo.249e7cbd.svg": "/static/media/logo.249e7cbd.svg",
+    "static/media/logo_fiocruz.a503dfaf.svg": "/static/media/logo_fiocruz.a503dfaf.svg",
+    "static/media/logout.ba217236.svg": "/static/media/logout.ba217236.svg",
+    "static/media/masculino.3e649d09.svg": "/static/media/masculino.3e649d09.svg",
+    "static/media/ms_governo.148491f8.svg": "/static/media/ms_governo.148491f8.svg",
+    "static/media/mulher.dff9fbcd.svg": "/static/media/mulher.dff9fbcd.svg",
+    "static/media/password.67c5c045.svg": "/static/media/password.67c5c045.svg",
+    "static/media/user-alt.e6be0f76.svg": "/static/media/user-alt.e6be0f76.svg",
+    "static/media/user.845c8903.svg": "/static/media/user.845c8903.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9f921a2c.js",
+    "static/css/2.42d51ddf.chunk.css",
+    "static/js/2.b0dc7c2a.chunk.js",
+    "static/css/main.c60f7c20.chunk.css",
+    "static/js/main.01561ff3.chunk.js"
+  ]
+}

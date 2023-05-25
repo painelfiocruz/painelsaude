@@ -1,0 +1,24 @@
+FROM  heartysoft/docker-pandas-fastparquet:latest
+
+
+COPY requirements.txt .
+RUN apk update && apk upgrade
+RUN apk add --no-cache \
+                       pkgconfig \
+                       git \
+                       gcc \
+                       curl \
+                       libcurl \
+                       python3-dev \
+                       gpgme-dev \
+                       libc-dev
+RUN apk add --no-cache postgresql-dev build-base  \
+RUN  rm -rf /var/cache/apk/*
+# RUN apk add clang lld
+
+# RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -y | sh
+
+RUN pip install --upgrade pip 
+#RUN pip install git+https://github.com/dask/fastparquet
+RUN pip install -r requirements.txt
+

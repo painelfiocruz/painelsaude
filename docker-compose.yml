@@ -1,0 +1,21 @@
+version: "2.2"
+services:
+  backend:
+    image: painelsaudefiocruz/public-dashboard:0.2
+    environment:
+      - HOST=<host>
+      - DATABASE=<database>
+      - USER=<user>
+      - PASSWORD=<password>
+      - PORT=5432
+      - CIDADE=<CIDADE>
+      - ESTADO=<ESTADO>
+      - ADMIN_USR=admin
+      - ADMIN_PASS=<PASSWORD>
+    ports:
+      - "5002:5001"
+    mem_limit: 3g
+# networks:
+#   default:
+#     external:
+#       name: painel-ouropreto

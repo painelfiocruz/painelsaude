@@ -1,27 +1,29 @@
 from flask import Flask, jsonify
-from flask_marshmallow import Marshmallow
-from flask_sqlalchemy import SQLAlchemy
-from config import host, port, passwd, database, user
-from .models.conexao import Conexao
 import logging
-from .models import IreceBase
-from .models.generateBases import  generateAll
-# from .controllers.criarCadastroMestre import criarCadastroMestre
-# from .controllers.criarBaseFinal import criarBaseFinal
+from .models import IreceBase, PregnantsBase
 logging.basicConfig(level=logging.DEBUG)
+from flask_cors import CORS
+from .genbase import generateBases
+import os
 
-app = Flask(__name__)
-app.config.from_object('config') 
 
-db = SQLAlchemy(app)
-ma = Marshmallow(app)
-con = Conexao(host, database,  user, passwd, port)
-# criarCadastroMestre(con)
-# generateAll(con)
-# criarBaseFinal(con)
+app = Flask(__name__,
+    template_folder='../build',
+    static_url_path='/static/',
+    static_folder='../build/static/'
+)
+CORS(app)
+print("Generating base.....")
+import time
+start_time = time.time()
+generateBases()
+print("--- %s seconds ---" % (time.time() - start_time))
+print("------" )
+
 file = IreceBase.IreceBase()
 file.getBase()
-# print(cadIndividual(con))
+pregnants = PregnantsBase.PregnantsBase()
+pregnants.getBase()
 
-from .models import login
-from .routes import routes
+
+from .routes import routes, city, pregnants, arterialHypertension, diabetes
