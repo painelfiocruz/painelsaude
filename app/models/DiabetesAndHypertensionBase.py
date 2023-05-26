@@ -6,7 +6,7 @@ from ..helpers.str import treatNames, strToData
 logging.basicConfig(level=logging.DEBUG)
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
-
+from load_bases import load_hipertensao_base, load_diabetes_base
 def singleton(cls):
     instances = {}
 
@@ -49,8 +49,7 @@ class ArterialHypertensionBase(BaseEntity):
   def getBase(self):
     if self._base is None:
       logging.info('Loading the pregnants final data base')
-      self._base = pd.read_excel(
-          'files/BASE_ATENDIMENTOS_X_HIPERTENSAO.xlsx', engine='openpyxl')
+      self._base = load_hipertensao_base()
       logging.info('Base loaded')
     # print(self._base)
     return self._base
@@ -68,8 +67,7 @@ class DiabetesBase(BaseEntity):
   def getBase(self):
     if self._base is None:
       logging.info('Loading the pregnants final data base')
-      self._base = pd.read_excel(
-          'files/BASE_ATENDIMENTOS_X_DIABETICOS.xlsx', engine='openpyxl')
+      self._base = load_diabetes_base()
       logging.info('Base loaded')
     # print(self._base)
     return self._base

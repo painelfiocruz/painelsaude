@@ -1,7 +1,8 @@
 import logging
 import pandas as pd
 import numpy as np
-
+from load_bases import load_cadastro_mestre
+import os
 logging.basicConfig(level=logging.DEBUG)
 
 
@@ -26,12 +27,7 @@ class IreceBase:
   def getBase(self):
     if self._base is None:
       logging.info('Loading the final data base')
-      self._base = pd.read_excel(
-          'files/CADASTRO_MESTRE_JOIN_AT_IND_GEST_HIP_DIAB_JOIN_UNIDADES_CLEAN_PAINEL.xlsx', engine='openpyxl')
-      # self._base = pd.read_parquet(
-      #     'files/BASE_DEMOGRAFICO.parquet')
-      logging.info('Base loaded')
-    # print(self._base)
+      self._base = load_cadastro_mestre()
     return self._base
 
   def gender(self, __data,  nu_cnes=None):
@@ -114,13 +110,12 @@ class IreceBase:
                           ]
                         ) \
                 .to_dict()
-      print( result )
       return result
 
   def getDemographicInfo(self, nu_cnes = None):
     nu_cnes = nu_cnes
     return  {
-    "ibgePopulation": 72512,
+    "ibgePopulation": os.getenv('POPULATION', 72512),
     "total": self.getTotalCnes(self._base, nu_cnes),
     "gender":self.gender(self._base, nu_cnes),
     "locationArea": self.locationArea(self._base, nu_cnes),

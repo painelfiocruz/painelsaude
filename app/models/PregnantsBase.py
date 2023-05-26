@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import collections
 from ..helpers.str import treatNames, strToData
+from load_bases import load_gestantes_base
 logging.basicConfig(level=logging.DEBUG)
 
 def singleton(cls):
@@ -25,10 +26,7 @@ class PregnantsBase:
   def getBase(self):
     if self._base is None:
       logging.info('Loading the pregnants final data base')
-      # self._base = pd.read_parquet(
-      #     'files/BASE_GESTACOES_FINAL_PAINEL.parquet')
-      self._base = pd.read_excel(
-          'files/BASE_GESTACOES_FINAL_PAINEL.xlsx', engine='openpyxl')
+      self._base = load_gestantes_base()
       logging.info('Base loaded')
     # print(self._base)
     return self._base

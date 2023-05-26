@@ -64,7 +64,6 @@ class ObstetricFactors:
     def __init__(self):
         pass
     def fn_gestacoes_previas( self,_data) :
-        print( _data['N_gestacoes'].unique() )
         _data['N_gestacoes'] = _data['N_gestacoes'].fillna(0)
         _data['N_gestacoes'] = _data['N_gestacoes'].astype(str).astype(float).astype(int)
         return {
@@ -97,8 +96,6 @@ class ObstetricFactors:
 class PregnantsByTimeRange:
     def __init__(self):
         pass
-    
-    
 
 
     def getDataBetweenWeeks( self,data,  start, end):
@@ -165,6 +162,9 @@ class ExamsAndRequests:
   def __init__(self):
     self.notFound = set()
     """
+    Mapeamento de procedimentos dessa forma o procedimento fica padronizado
+
+    PS:
     ABEX026 = ABP de procedimento
     0202010473 = SIGTAP
 
@@ -249,12 +249,6 @@ class ExamsAndRequests:
         }
     }
 
-  
-        
-        
-
-
-
   def mapDto(self):
     return [
       {"tipo": "Hemograma", "solicitados": self.listExams['hemograma']['solicitados'], "avaliados": self.listExams['hemograma']['avaliados'] },
@@ -269,15 +263,14 @@ class ExamsAndRequests:
             
     ]
 
-
-  """ 
-- se o código do exame não estiver nas colunas solicitado e avaliado, soma 1 solicitação pendente para o exame; 
-- se o código do exame estiver nas colunas solicitado e avaliado, não conta como o exame como pendente solicitado e nem avaliado;
-- se o código do exame  estiver nas coluna solicitado, mas não na coluna avaliado, conta pendente nos avaliados do exame; 
--  se o código do exame  estiver nas coluna avaliado, não conta como o exame pendente solicitado e nem avaliado;
-
-  """    
+    
   def computeExams(self, solicitados, avaliados):
+    """ 
+        - se o código do exame não estiver nas colunas solicitado e avaliado, soma 1 solicitação pendente para o exame; 
+        - se o código do exame estiver nas colunas solicitado e avaliado, não conta como o exame como pendente solicitado e nem avaliado;
+        - se o código do exame  estiver nas coluna solicitado, mas não na coluna avaliado, conta pendente nos avaliados do exame; 
+        - se o código do exame  estiver nas coluna avaliado, não conta como o exame pendente solicitado e nem avaliado;
+    """ 
     if len(solicitados) == 0 and len(avaliados)==0:
       for i in range(0, len(self.listaExames)-1):
           condition = self.listaExames[i]
@@ -416,7 +409,7 @@ class PregnantsService:
 
     def prenatalIndicators ( self, data, nu_cnes = None) :
         _data = data.copy()
-        # _data = filterLastYear(_data)
+        _data = filterLastYear(_data)
         if nu_cnes is not None:
             _data =  data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
         if _data.shape[0] ==0:
@@ -439,7 +432,7 @@ class PregnantsService:
 
     def obstetricFactors(self, data, nu_cnes = None) :
         _data = data.copy()
-        # _data = filterLastYear(_data)
+        _data = filterLastYear(_data)
         if nu_cnes is not None:
             _data =  data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
         if _data.shape[0] == 0:
@@ -506,7 +499,7 @@ class PregnantsService:
         }
     def pregnatsPerages(self,  data, nu_cnes = None) :
         _data = data.copy()
-        # _data = filterLastYear(_data)
+        _data = filterLastYear(_data)
         if nu_cnes is not None:
             _data =  data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
         gestante_localiza = _data
@@ -608,14 +601,15 @@ class PregnantsService:
         if nu_cnes is not None:
             _data =  _data.query( 'nu_cnes == "{}"'.format(nu_cnes) )
         examsRequest = ExamsAndRequests()
-        pecs = _data['co_fat_cidadao_pec'].unique()
         
         mergetable = MergeTable()
-        listId = []
-        for i in pecs:
-            listId.append(i)
-        pecsQuery = _data[_data['co_fat_cidadao_pec'].isin(pecs)]
-        pecsQuery.apply( lambda x: mergetable.buildTable(x), axis=1)
+
+        """
+        Cria uma tabale relacionando 
+            pec_id -> ds_filtro_proced_solicitados
+            pec_id -> ds_filtro_proced_avaliados
+        """
+        _data.apply( lambda x: mergetable.buildTable(x), axis=1)
 
         examsRequest = ExamsAndRequests()
         for i in mergetable.mappedArray:
