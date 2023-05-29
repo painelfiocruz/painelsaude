@@ -81,6 +81,7 @@ class BaseGroupModel:
               'Rural': self.localizacao['Rural'].count[i]
             }
     return result
+  
   def getLocationsByGender(self):
     result = dict()
     for i in self.gender['Masculino'].count:

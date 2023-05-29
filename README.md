@@ -4,6 +4,13 @@
 
 ### CADASTRO MESTRE
 
+| co_fat_cidadao_pec | co_dim_identidade_genero_CP | co_dim_tempo_nascimento | co_dim_sexo_CI | co_dim_unidade_saude_CI | co_dim_municipio_CI | co_dim_tempo | co_dim_identidade_genero_CI | dt_nascimento_CI | co_dim_tempo_CI | \_mergeA | co_seq_fat_cidadao_territorio | co_fat_familia_territorio | \_mergeB | co_fat_cad_domiciliar | \_mergeC | co_dim_tipo_localizacao | co_dim_municipio_CD | co_dim_tempo_CD | \_merge | CO_DIM_IDENTIDADE_GENERO | CO_DIM_SEXO | DT_NASCIMENTO |
+| ------------------ | --------------------------- | ----------------------- | -------------- | ----------------------- | ------------------- | ------------ | --------------------------- | ---------------- | --------------- | -------- | ----------------------------- | ------------------------- | -------- | --------------------- | -------- | ----------------------- | ------------------- | --------------- | ------- | ------------------------ | ----------- | ------------- |
+
+| 48188 | 5 | 1959-10-08 00:00:00 | 2.0 | 63 | 980 | 20200521 | 5.0 | 1959-10-08 00:00:00 | 2020-05-21 00:00:00 | both | 1756256 | 658922 | both | 155123 | both | 2 | 980 | 2020-06-22 00:00:00 | both | 5.0 | 2.0 | 1959-10-08 00:00:00 |
+
+### CADASTRO MESTRE
+
 | co_fat_cidadao_pec | co_unidade_saude | ds_tipo_localizacao | co_municipio | dt_atendimento             | nu_idade_gestacional       | nu_gestas_previas | st_vacinacao_em_dia | cad_proced_solicitados                          | cad_proced_avaliados                | cad_filtro_cids                 | cad_filtro_ciap                | st_hipertensao | st_diabetes | st_gestante | nu_cnes | ds_unidade_saude               | no_municipio | co_ibge | no_uf | sg_uf | ds_sexo  | dt_nascimento       | nu_idade | ds_faixa_etaria |
 | ------------------ | ---------------- | ------------------- | ------------ | -------------------------- | -------------------------- | ----------------- | ------------------- | ----------------------------------------------- | ----------------------------------- | ------------------------------- | ------------------------------ | -------------- | ----------- | ----------- | ------- | ------------------------------ | ------------ | ------- | ----- | ----- | -------- | ------------------- | -------- | --------------- |
 | 48188              | 63               | Urbano              | 980,980,980  | 20181106,20190729,20200821 | 30001231,30001231,30001231 | ,,                | 0,0,                | 20181106:\|0205020097\|,20190729:\|,20200821:\| | 20181106:\|,20190729:\|,20200821:\| | \|Z000\|,\|I10\|I528\|,\|Z000\| | \|ABP023\|,\|,\|,\|,\|P20\|,\| | TRUE           | FALSE       | FALSE       | 3652971 | UBSF EDICON RIBEIRO DOS SANTOS | IRECÊ        | 2914604 | BAHIA | BA    | Feminino | 1959-10-08 00:00:00 | 62       | Faixa 7         |
@@ -156,23 +163,112 @@ Endpoints:
 - professionals
   - [`app/routes/arterialHypertension.py:arterialHypertensionProffessionals`](app/routes/arterialHypertension.py#L128)
 
+## Modelo Hipertensão
+
+```mermaid
+classDiagram
+
+  class BaseModel{
+     <<interface>>
+     +checkPresence(row)
+     +calcPercent()
+     toJson()
+  }
+
+
+  BaseModel <-- HeartAttack
+  BaseModel <-- BrainStroke
+  BaseModel <-- KidneyDisease
+  BaseModel <-- CoronaryDisease
+  BaseModel <-- VascularBrainDisease
+  class HeartAttack{
+    +totalRegistros
+  }
+  class BrainStroke{
+    +totalRegistros
+  }
+  class KidneyDisease{
+    +totalRegistros
+  }
+  class CoronaryDisease{
+    +totalRegistros
+  }
+  class VascularBrainDisease{
+    +totalRegistros
+  }
+```
+
+```mermaid
+classDiagram
+  class PipelineModel{
+    +pipelineFn(row)
+    +getResponse(self)
+  }
+  PipelineModel  <|-- HeartAttackModel
+  HeartAttackModel *-- HeartAttack
+  HeartAttackModel *-- BrainStroke
+  HeartAttackModel *-- KidneyDisease
+  HeartAttackModel *-- CoronaryDisease
+  HeartAttackModel *-- VascularBrainDisease
+
+  class HeartAttackModel{
+    ...
+  }
+
+```
+
+## Modelo Diabetes
+
+```mermaid
+classDiagram
+
+
+  class BaseModel{
+    <<interface>>
+    +checkPresence(row)
+    +calcPercent()
+    toJson()
+  }
+
+
+  BaseModel <-- DiabeticRetinopathy
+  BaseModel <-- KidneyDisease
+  BaseModel <-- CoronaryDisease
+  BaseModel <-- VascularBrainDisease
+  BaseModel <-- Neuropathy
+  BaseModel <-- OcclusiveArterialDisease
+
+```
+
+```mermaid
+classDiagram
+  class PipelineModel{
+      +pipelineFn(row)
+      +getResponse(self)
+  }
+  PipelineModel  <|-- DiabeticDiseaseModel
+
+  DiabeticDiseaseModel *-- DiabeticRetinopathy
+  DiabeticDiseaseModel *-- KidneyDisease
+  DiabeticDiseaseModel *-- CoronaryDisease
+  DiabeticDiseaseModel *-- VascularBrainDisease
+  DiabeticDiseaseModel *-- Neuropathy
+  DiabeticDiseaseModel *-- OcclusiveArterialDisease
+```
+
 # TO RUN
 
 - First some configurations must be setup on docker-compose.yml
 
 ```
-environment:
-      - HOST=<host>
-      - DATABASE=<database>
-      - USER=<user>
-      - PASSWORD=<password>
-      - PORT=5432
-      - CIDADE=<CIDADE>
-      - ESTADO=<ESTADO>
-      - ADMIN_USR=admin
-      - ADMIN_PASS=<PASSWORD>
-      - POPULATION=<number>
+
+environment: - HOST=<host> - DATABASE=<database> - USER=<user> - PASSWORD=<password> - PORT=5432 - CIDADE=<CIDADE> - ESTADO=<ESTADO> - ADMIN_USR=admin - ADMIN_PASS=<PASSWORD> - POPULATION=<number>
+
 ```
 
 - Run:
   `docker-compose up`
+
+```
+
+```
