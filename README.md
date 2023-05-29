@@ -4,10 +4,9 @@
 
 ### CADASTRO MESTRE
 
-| co_fat_cidadao_pec | co_dim_identidade_genero_CP | co_dim_tempo_nascimento | co_dim_sexo_CI | co_dim_unidade_saude_CI | co_dim_municipio_CI | co_dim_tempo | co_dim_identidade_genero_CI | dt_nascimento_CI | co_dim_tempo_CI | \_mergeA | co_seq_fat_cidadao_territorio | co_fat_familia_territorio | \_mergeB | co_fat_cad_domiciliar | \_mergeC | co_dim_tipo_localizacao | co_dim_municipio_CD | co_dim_tempo_CD | \_merge | CO_DIM_IDENTIDADE_GENERO | CO_DIM_SEXO | DT_NASCIMENTO |
-| ------------------ | --------------------------- | ----------------------- | -------------- | ----------------------- | ------------------- | ------------ | --------------------------- | ---------------- | --------------- | -------- | ----------------------------- | ------------------------- | -------- | --------------------- | -------- | ----------------------- | ------------------- | --------------- | ------- | ------------------------ | ----------- | ------------- |
-
-| 48188 | 5 | 1959-10-08 00:00:00 | 2.0 | 63 | 980 | 20200521 | 5.0 | 1959-10-08 00:00:00 | 2020-05-21 00:00:00 | both | 1756256 | 658922 | both | 155123 | both | 2 | 980 | 2020-06-22 00:00:00 | both | 5.0 | 2.0 | 1959-10-08 00:00:00 |
+| co_fat_cidadao_pec | co_dim_identidade_genero_CP | co_dim_tempo_nascimento | co_dim_sexo_CI | co_dim_unidade_saude_CI | co_dim_municipio_CI | co_dim_tempo | co_dim_identidade_genero_CI | dt_nascimento_CI    | co_dim_tempo_CI     | \_mergeA | co_seq_fat_cidadao_territorio | co_fat_familia_territorio | \_mergeB | co_fat_cad_domiciliar | \_mergeC | co_dim_tipo_localizacao | co_dim_municipio_CD | co_dim_tempo_CD     | \_merge | CO_DIM_IDENTIDADE_GENERO | CO_DIM_SEXO | DT_NASCIMENTO       |
+| ------------------ | --------------------------- | ----------------------- | -------------- | ----------------------- | ------------------- | ------------ | --------------------------- | ------------------- | ------------------- | -------- | ----------------------------- | ------------------------- | -------- | --------------------- | -------- | ----------------------- | ------------------- | ------------------- | ------- | ------------------------ | ----------- | ------------------- |
+| 48188              | 5                           | 1959-10-08 00:00:00     | 2.0            | 63                      | 980                 | 20200521     | 5.0                         | 1959-10-08 00:00:00 | 2020-05-21 00:00:00 | both     | 1756256                       | 658922                    | both     | 155123                | both     | 2                       | 980                 | 2020-06-22 00:00:00 | both    | 5.0                      | 2.0         | 1959-10-08 00:00:00 |
 
 ### CADASTRO MESTRE
 
